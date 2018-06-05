@@ -1,0 +1,23 @@
+﻿<config>
+  <menus ID="0" Name="การตั้งค่า" Icon="menu-icon fa fa-eye" ManagementName="Administrator" Type="Management" />
+  <menus ID="1" Name="ข้อมูลทะเบียนอาวุธปืน" Icon="menu-icon fa fa-book" ManagementName="Gunbook" Type="Management" />
+  <menus ID="2" Name="ข้อมูลหนังสือทะเบียนอาวุธปืน" Icon="menu-icon fa fa-book" Type="Url" Url="../page/GunBook.aspx?ID=2">
+  </menus>
+  <menus ID="3" Name="ข้อมูลทะเบียนอาวุธปืนทั้งหมด (เห็นและแก้ไขหมายเหตุได้)" Icon="menu-icon fa fa-book" Type="Url" Url="../page/GunRegistration.aspx?ID=3">
+  </menus>
+  <menus ID="4" Name="ข้อมูลทะเบียนอาวุธปืนทั้งหมด (ไม่สามารถเห็นหมายเหตุได้)" Icon="menu-icon fa fa-book" Type="Url" Url="../page/GunRegistration.aspx?ID=4">
+  </menus>
+  <menus ID="5" Name="ข้อมูลทะเบียนอาวุธปืนทั้งหมด (ปกปิดข้อความ)" Icon="menu-icon fa fa-book" Type="Url" Url="../page/GunRegistration.aspx?ID=5">
+  </menus>
+  <menus ID="6" Name="ดูข้อมูลการนำเข้าข้อมูล" Icon="menu-icon fa fa-book" Type="Url" Url="../page/Default.aspx?ID=6">
+  </menus>
+  <menus ID="7" Name="รายงานการบันทึกข้อมูล" Icon="menu-icon fa fa-book" Type="Url" Url="../page/reportData.aspx?ID=7">
+  </menus>
+  <menus ID="8" Name="รายงานภาพไม่ได้คุณภาพ" Icon="menu-icon fa fa-book" Type="Url" Url="../page/Default2.aspx?ID=8">
+  </menus>
+  <menus ID="9" Name="กำหนดที่จัดเก็บเอกสาร" Icon="menu-icon fa fa-book" Type="Url" Url="../page/PathConfig.aspx?ID=9">
+  </menus>
+  <menus ID="10" Name="นำเข้าข้อมูล" Icon="menu-icon fa fa-book" Type="Url" Url="../page/importDataMultiPages.aspx?ID=10">
+  </menus>
+  <menus ID="11" Name="สมัครงาน" Icon="menu-icon fa fa-book" ManagementName="AppJob" Type="Management" />
+</config>

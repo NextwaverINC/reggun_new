@@ -1,0 +1,304 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>View Performance</title>
+
+    <script src="Scripts/angular.min.js"></script>
+    <script src="assets/js/jquery.js"></script>
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background: #E4E6E9;
+        }
+
+        .main-container {
+            padding-top: 72px;
+        }
+
+        .navbar-inverse {
+            background-color: #438EB9;
+            border-bottom-color: rgba(0,0,0,0.33);
+        }
+
+            .navbar-inverse .navbar-brand {
+                color: #EEE;
+            }
+
+        hr {
+            border-width: 0;
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+    </style>
+    <script src="assets/js/bootstrap.js"></script>
+    <script>
+        function fnLoading() {
+            document.getElementById("mainApp").style.display = "none";
+            document.getElementById("loading").style.display = "";
+        }
+        function fnUnLoading() {
+            document.getElementById("mainApp").style.display = "";
+            document.getElementById("loading").style.display = "none";
+        }
+        var app = angular.module('myApp', []);
+        var config = { headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;' } }
+        app.controller('StartApp', StartApp);
+        function StartApp($scope, $http) {
+            loadData($scope, $http);
+
+            $scope.booledit = false;
+
+            $scope.RecordData = {
+                bookno: '',
+                bookyear: '',
+                gunregidprefix: '',
+                gunregidstart: '',
+                gunregidend: '',
+                pagetotal: ''
+            }
+
+            $scope.fnDelAll = function () {
+                $scope.DATA.splice(0)
+            }
+
+            $scope.fnDelRow = function (index) {
+                $scope.DATA.splice(index, 1);
+            }
+
+            $scope.fnAddRow = function (boolEdit) {
+                if (!$scope.booledit)
+                    $scope.DATA.push($scope.RecordData);
+                $scope.booledit = false;
+                $scope.RecordData = {
+                    bookno: '',
+                    bookyear: '',
+                    gunregidprefix: '',
+                    gunregidstart: '',
+                    gunregidend: '',
+                    pagetotal: ''
+                }
+            }
+
+            $scope.fnEditRow = function (item, idx) {
+                $scope.RecordData = item;
+                $scope.booledit = true;
+            }
+
+            $scope.fnSave = function (item, idx) {
+                fnLoading();
+                var data = $.param({
+                    Command: 'SaveTaskGenBook',
+                    record: JSON.stringify($scope.DATA)
+                });
+
+                $http.post("../server/Server_Gunbook.aspx", data, config)
+                    .success(function (data, status, headers, config) {
+
+                        window.location.reload();
+
+                    })
+                    .error(function (data, status, header, config) {
+                        window.parent.refreshAllData();
+                    });
+            }
+
+
+        }
+        function loadData($scope, $http) {
+            fnLoading();
+            var data = $.param({
+                Command: 'loadTaskBook'
+            });
+
+            $http.post("server/Server_Gunbook.aspx", data, config)
+                .success(function (data, status, headers, config) {
+                    $scope.DATA = data.Result;
+                    fnUnLoading();
+                    try {
+
+                    } catch (err) { }
+                })
+                .error(function (data, status, header, config) { });
+        }
+    </script>
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header pull-left">
+                <a class="navbar-brand" href="#">
+                    &nbsp;<i class="glyphicon glyphicon-eye-open"></i>&nbsp;
+                    Add Task Gen Book<span class="smaller-75"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainApp" class="container main-container" ng-app="myApp" ng-controller="StartApp">
+        <h2 class="page-header text-primary text-center">Task Gen Book</h2>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <a class="btn btn-info btn-sm" ng-click="fnSave()" style="float:left">
+                    <i class="ace-icon fa fa-plus bigger-110"></i>บันทึก
+                </a>
+                <span style="float:left">&nbsp;</span>
+                <a class="btn btn-danger btn-sm" ng-click="fnDelAll()" style="float:left">
+                    <i class="ace-icon fa fa-plus bigger-110"></i>ลบทั้งหมด
+                </a>
+                <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal" style="float:right">
+                    <i class="ace-icon fa fa-plus bigger-110"></i>เพิ่มข้อมูล
+                </a>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom:20px;">
+            <div class="col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-striped" style="border: 1px outset #90ccff;background: #d4ebff;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>เลขที่หนังสือ</th>
+                                <th>ปี</th>
+                                <th>คำนำหน้าเลขทะบียน</th>
+                                <th>เลขทะเบียนเริ่มต้น</th>
+                                <th>เลขทะเบียนสิ้นสุด</th>
+                                <th>จำนวนหน้าทั้งหมด</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(key,item) in DATA">
+                                <td scope="row">{{key + 1}}</td>
+                                <td>{{item.bookno}}</td>
+                                <td>{{item.bookyear}}</td>
+                                <td>{{item.gunregidprefix}}</td>
+                                <td>{{item.gunregidstart}}</td>
+                                <td>{{item.gunregidend}}</td>
+                                <td>{{item.pagetotal}}</td>
+                                <td class="text-center" nowrap>
+                                    <span class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#myModal" ng-click="fnEditRow(item, $index)" style="color: #337ab7; font-size: 16px;cursor:pointer;"></span>
+                                </td>
+                                <td class="text-center" nowrap>
+                                    <span class="glyphicon glyphicon-trash" ng-click="fnDelRow($index)" style="color: #a95553; font-size: 16px;cursor:pointer;"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bootstrap-dialog" id="myModal" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content" style="background-color: #eff3f8;">
+                    <!-- Modal Header -->
+                    <div class="modal-header" style="padding: 5px; border: 0px;">
+                        <button type="button" class="close"
+                                data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                            <span class="sr-only">Close</span>
+                        </button>
+                        <h4 class="modal-title">
+                            ข้อมูล
+                        </h4>
+                    </div>
+                    <!-- Modal Body -->
+                    <div class="modal-body" style="background-color: white;">
+                        <div class="row">
+                            <div class=" col-sm-12" style="margin-bottom: 5px;">
+                                <div class="form-group">
+                                    <div class="col-sm-5 col-xs-12">
+                                        <p class="text-right"><strong>เลขที่หนังสือ :</strong></p>
+                                    </div>
+                                    <div class="col-sm-7 col-xs-12">
+                                        <input type="text" class="form-control" ng-model="RecordData.bookno" style="width: 100%" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-sm-12" style="margin-bottom: 5px;">
+                                <div class="form-group">
+                                    <div class="col-sm-5 col-xs-12">
+                                        <p class="text-right"><strong>ปี :</strong></p>
+                                    </div>
+                                    <div class="col-sm-7 col-xs-12">
+                                        <input type="text" class="form-control" ng-model="RecordData.bookyear" style="width: 100%" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-sm-12" style="margin-bottom: 5px;">
+                                <div class="form-group">
+                                    <div class="col-sm-5 col-xs-12">
+                                        <p class="text-right"><strong>คำนำหน้าเลขทะบียน :</strong></p>
+                                    </div>
+                                    <div class="col-sm-7 col-xs-12">
+                                        <input type="text" class="form-control" ng-model="RecordData.gunregidprefix" style="width: 100%" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-sm-12" style="margin-bottom: 5px;">
+                                <div class="form-group">
+                                    <div class="col-sm-5 col-xs-12">
+                                        <p class="text-right"><strong>เลขทะเบียนเริ่มต้น :</strong></p>
+                                    </div>
+                                    <div class="col-sm-7 col-xs-12">
+                                        <input type="text" class="form-control" ng-model="RecordData.gunregidstart" style="width: 100%" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-sm-12" style="margin-bottom: 5px;">
+                                <div class="form-group">
+                                    <div class="col-sm-5 col-xs-12">
+                                        <p class="text-right"><strong>เลขทะเบียนสิ้นสุด :</strong></p>
+                                    </div>
+                                    <div class="col-sm-7 col-xs-12">
+                                        <input type="text" class="form-control" ng-model="RecordData.gunregidend" style="width: 100%" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" col-sm-12" style="margin-bottom: 5px;">
+                                <div class="form-group">
+                                    <div class="col-sm-5 col-xs-12">
+                                        <p class="text-right"><strong>จำนวนหน้าทั้งหมด :</strong></p>
+                                    </div>
+                                    <div class="col-sm-7 col-xs-12">
+                                        <input type="text" class="form-control" ng-model="RecordData.pagetotal" style="width: 100%" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border: 0px;">
+                        <div class="row">
+                            <div class="col-sm-12 text-right">
+                                <a class="btn btn-success btn-xs" ng-click="fnAddRow()" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-save bigger-110"></i>บันทึก
+                                </a>
+                                <a class="btn btn-danger btn-xs" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-close bigger-110"></i>ปิด
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="loading" style="display:none;margin-top:50px">
+        <center>
+            <h1 class="bigger"><i class="ace-icon fa fa-spinner fa-spin orange"></i></h1>
+            <h3>
+                อยู่ระหว่างประมวลผลโปรดรอ...
+            </h3>
+        </center>
+    </div>
+
+</body>
+</html>

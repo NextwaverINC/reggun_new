@@ -1,0 +1,27 @@
+﻿<Document ID="" Name="App_Job">
+  <Data>
+    <Section ID="1" Name="Profile" Type="STR">
+      <Items Name="Profile" Type="FIX">
+        <Item Name="Name" Type="STR" Value="" />
+        <Item Name="Age" Type="STR" Value="" />
+        <Item Name="Position" Type="STR" Value="" />
+        <Item Name="Salary" Type="STR" Value="" />
+        <Item Name="Tel" Type="STR" Value="" />
+        <Item Name="CreateDate" Type="STR" Value="" />
+        <Item Name="CreateBy" Type="STR" Value="" />
+        <Item Name="UpdateDate" Type="STR" Value="" />
+        <Item Name="UpdateBy" Type="STR" Value="" />
+      </Items>
+    </Section>
+    <Section ID="2" Name="Worked" Type="STR">
+      <Items Name="WorkedInfo" Type="SEQ">
+        <Means Name="Worked">
+          <Mean ID="C00" Name="Company" Type="STR" Desc="บริษัท" />
+          <Mean ID="C01" Name="WorkStart" Type="STR" Desc="วันที่เริ่มทำงาน" />
+          <Mean ID="C02" Name="EndStart" Type="STR" Desc="วันที่ออกทำงาน" />
+          <Mean ID="C03" Name="Position" Type="STR" Desc="ตำแหน่ง" />
+        </Means>
+      </Items>
+    </Section>
+  </Data>
+</Document>

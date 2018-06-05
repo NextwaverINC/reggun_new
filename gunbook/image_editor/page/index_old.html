@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Image editor basic</title>
+    <link type="text/css" href="css/colorpicker.min.css" rel="stylesheet">
+    <link type="text/css" href="css/tui-image-editor.css" rel="stylesheet">
+</head>
+<body>
+    <div class="body-container">
+        <div class="tui-image-editor-controls">
+            <div class="header"> 
+                
+                <ul class="menu">  
+                    <li class="menu-item border" id="btn-download">ดาวน์โหลด</li>
+                </ul>
+            </div>
+            <ul class="menu">
+                <li class="menu-item disabled" id="btn-undo">ย้อนกลับ</li>
+                <li class="menu-item disabled" id="btn-redo">ทำอีกครั้ง</li>
+                <li class="menu-item" id="btn-clear-objects">ล้างทั้งหมด</li>
+                <li class="menu-item" id="btn-remove-active-object">ยกเลิกวัตถุ</li>
+                <li class="menu-item" id="btn-crop">ตัดภาพ</li>
+                <li class="menu-item" id="btn-flip">กลับภาพ</li>
+                <li class="menu-item" id="btn-rotation">หมุนภาพ</li>
+                <li class="menu-item" id="btn-draw-line">วาดเส้น</li>
+                <li class="menu-item" id="btn-draw-shape">รูปร่าง</li>
+                <li class="menu-item" id="btn-add-icon">ไอคอน</li>
+                <li class="menu-item" id="btn-text">ข้อความ</li>
+                <li class="menu-item" id="btn-mask-filter">หน้ากาก</li>
+                <li class="menu-item" id="btn-image-filter">ฟิลเตอร์</li>
+            </ul>
+            <div class="sub-menu-container" id="crop-sub-menu">
+                <ul class="menu">
+                    <li class="menu-item" id="btn-apply-crop">ยืนยัน</li>
+                    <li class="menu-item" id="btn-cancel-crop">ยกเลิก</li>
+                </ul>
+            </div>
+            <div class="sub-menu-container" id="flip-sub-menu">
+                <ul class="menu">
+                    <li class="menu-item" id="btn-flip-x">กลับภาพแนวนอน</li>
+                    <li class="menu-item" id="btn-flip-y">กลับภาพแนวตั้ง</li>
+                    <li class="menu-item" id="btn-reset-flip">ยกเลิก</li>
+                    <li class="menu-item close">ปิด</li>
+                </ul>
+            </div>
+            <div class="sub-menu-container" id="rotation-sub-menu">
+                <ul class="menu">
+                    <li class="menu-item" id="btn-rotate-clockwise">หมูนภาพ(30 องศา)</li>
+                    <li class="menu-item" id="btn-rotate-counter-clockwise">หมุนภาพ(-30 องศา)</li>
+                    <li class="menu-item no-pointer"><label>ระบุองศา<input id="input-rotation-range" type="range" min="-360" value="0" max="360"></label></li>
+                    <li class="menu-item close">ปิด</li>
+                </ul>
+            </div>
+            <div class="sub-menu-container menu" id="draw-line-sub-menu">
+                <ul class="menu">
+                    <li class="menu-item">
+                        <label><input type="radio" name="select-line-type" value="freeDrawing" checked="checked">ภาพลายเส้น</label>
+                        <label><input type="radio" name="select-line-type" value="lineDrawing"> เส้นตรง</label>
+                    </li>
+                    <li class="menu-item">
+                        <div id="tui-brush-color-picker">Brush color</div>
+                    </li>
+                    <li class="menu-item"><label class="menu-item no-pointer">ความกว้างของแปรง<input id="input-brush-width-range" type="range" min="5" max="30" value="12"></label></li>
+                    <li class="menu-item close">Close</li>
+                </ul>
+            </div>
+            <div class="sub-menu-container" id="draw-shape-sub-menu">
+                <ul class="menu">
+                    <li class="menu-item">
+                        <label><input type="radio" name="select-shape-type" value="rect" checked="checked"> สี่เหลี่ยม</label>
+                        <label><input type="radio" name="select-shape-type" value="circle"> วงกลม</label>
+                        <label><input type="radio" name="select-shape-type" value="triangle"> สามเหลี่ยม</label>
+                    </li>
+                    <li class="menu-item">
+                        <select name="select-color-type">
+                            <option value="fill">ใส่</option>
+                            <option value="stroke">ลากเส้น</option>
+                        </select>
+                        <label><input type="checkbox" id="input-check-transparent">โปร่งใส</label>
+                        <div id="tui-shape-color-picker"></div>
+                    </li>
+                    <li class="menu-item"><label class="menu-item no-pointer">ขนาดของเส้น<input id="input-stroke-width-range" type="range" min="0" max="300" value="12"></label></li>
+                    <li class="menu-item close">Close</li>
+                </ul>
+            </div>
+            <div class="sub-menu-container" id="icon-sub-menu">
+                <ul class="menu">
+                    <li class="menu-item">
+                        <div id="tui-icon-color-picker">Icon color</div>
+                    </li>
+                    <li class="menu-item border" id="btn-register-icon">ไอคอนที่มี</li>
+                    <li class="menu-item icon-text" data-icon-type="arrow">➡</li>
+                    <li class="menu-item icon-text" data-icon-type="cancel">✖</li>
+                    <li class="menu-item close">ปิด</li>
+                </ul>
+            </div>
+            <div class="sub-menu-container" id="text-sub-menu">
+                <ul class="menu">
+                    <li class="menu-item">
+                        <div>
+                            <button class="btn-text-style" data-style-type="b">ตัวหนา</button>
+                            <button class="btn-text-style" data-style-type="i">ตัวเอียง</button>
+                            <button class="btn-text-style" data-style-type="u">ขีดเส้นใต้</button>
+                        </div>
+                        <div>
+                            <button class="btn-text-style" data-style-type="l">ชิดซ้าย</button>
+                            <button class="btn-text-style" data-style-type="c">ตรงกลาง</button>
+                            <button class="btn-text-style" data-style-type="r">ชิดชวา</button>
+                        </div>
+                    </li>
+                    <li class="menu-item"><label class="no-pointer"><input id="input-font-size-range" type="range" min="10" max="100" value="10"></label></li>
+                    <li class="menu-item">
+                        <div id="tui-text-color-picker">สีข้อความ</div>
+                    </li>
+                    <li class="menu-item close">ปิด</li>
+                </ul>
+            </div>
+            <div class="sub-menu-container" id="filter-sub-menu">
+                <ul class="menu">
+                    <li class="menu-item border input-wrapper">
+                        โหลดรูปภาพ
+                        <input type="file" accept="image/*" id="input-mask-image-file">
+                    </li>
+                    <li class="menu-item" id="btn-apply-mask">ยืนยัน</li>
+                    <li class="menu-item close">ปิด</li>
+                </ul>
+            </div>
+            <div class="sub-menu-container" id="image-filter-sub-menu">
+                <ul class="menu">
+                    <li class="menu-item align-left-top">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td><label><input type="checkbox" id="input-check-grayscale">โทนสีเทา</label></td>
+                                    <td><label><input type="checkbox" id="input-check-invert">กลับหัวกลับหาง</label></td>
+                                    <td><label><input type="checkbox" id="input-check-sepia">สีซีเปีย</label></td>
+                                </tr>
+                                <tr>
+                                    <td><label><input type="checkbox" id="input-check-sepia2">สีซีเปีย2</label></td>
+                                    <td><label><input type="checkbox" id="input-check-blur">เบลอ</label></td>
+                                    <td><label><input type="checkbox" id="input-check-sharpen">กรีด</label></td>
+                                </tr>
+                                <tr>
+                                    <td><label><input type="checkbox" id="input-check-emboss">ทำให้มีผิวนูน</label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                    <li class="menu-item align-left-top">
+                        <p>
+                            <label><input type="checkbox" id="input-check-remove-white">ลบสีขาว</label><br>
+                            <label>Threshold<input class="range-narrow" id="input-range-remove-white-threshold" type="range" min="0" value="60" max="255"></label><br>
+                            <label>Distance<input class="range-narrow" id="input-range-remove-white-distance" type="range" min="0" value="10" max="255"></label>
+                        </p>
+                    </li>
+                    <li class="menu-item align-left-top">
+                        <p>
+                            <label><input type="checkbox" id="input-check-brightness">ความสว่าง</label><br>
+                            <label>Value<input class="range-narrow" id="input-range-brightness-value" type="range" min="-255" value="100" max="255"></label>
+                        </p>
+                    </li>
+                    <li class="menu-item align-left-top">
+                        <p>
+                            <label><input type="checkbox" id="input-check-noise">สัญญาณรบกวน</label><br>
+                            <label>Value<input class="range-narrow" id="input-range-noise-value" type="range" min="0" value="100" max="1000"></label>
+                        </p>
+                    </li>
+                    <li class="menu-item align-left-top">
+                        <p>
+                            <label><input type="checkbox" id="input-check-gradient-transparancy">ความโปร่งใสสี</label><br>
+                            <label>Value<input class="range-narrow" id="input-range-gradient-transparency-value" type="range" min="0" value="100" max="255"></label>
+                        </p>
+                    </li>
+                    <li class="menu-item align-left-top">
+                        <p>
+                            <label><input type="checkbox" id="input-check-pixelate">ขนาด</label><br>
+                            <label>Value<input class="range-narrow" id="input-range-pixelate-value" type="range" min="2" value="4" max="20"></label>
+                        </p>
+                    </li>
+                    <li class="menu-item align-left-top">
+                        <p>
+                            <label><input type="checkbox" id="input-check-tint">สี</label><br>
+                            <div id="tui-tint-color-picker"></div>
+                            <label>Opacity<input class="range-narrow" id="input-range-tint-opacity-value" type="range" min="0" value="1" max="1" step="0.1"></label>
+                        </p>
+                    </li>
+                    <li class="menu-item align-left-top">
+                        <p>
+                            <label><input type="checkbox" id="input-check-multiply">คูณ</label>
+                            <div id="tui-multiply-color-picker"></div>
+                        </p>
+                    </li>
+                    <li class="menu-item align-left-top">
+                        <p>
+                            <label><input type="checkbox" id="input-check-blend">การผสมผสาน</label>
+                            <div id="tui-blend-color-picker"></div>
+                            <select name="select-blend-type">
+                                <option value="add" selected>เพิ่ม</option>
+                                <option value="diff">ลบ</option>
+                                <option value="diff">ลบออก</option>
+                                <option value="multiply">คูณ</option>
+                                <option value="screen">จอภาพ</option>
+                                <option value="lighten">เบา</option>
+                                <option value="darken">มืดมิด</option>
+                            </select>
+                        </p>
+                    </li>
+                    <li class="menu-item align-left-top">
+                        <p>
+                            <label><input type="checkbox" id="input-check-color-filter">ตัวกรองสี</label><br>
+                            <label>Threshold<input class="range-narrow" id="input-range-color-filter-value" type="range" min="0" value="45" max="255"></label>
+                        </p>
+                    </li>
+                    <li class="menu-item close">ปิด</li>
+                </ul>
+            </div>
+        </div>
+        <div class="tui-image-editor"></div>
+    </div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.6.7/fabric.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/nhnent/tui.code-snippet/v1.2.5/dist/tui-code-snippet.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/nhnent/tui.component.colorpicker/1.0.2/dist/colorpicker.min.js"></script>
+    <script type="text/javascript" src="../dist/tui-image-editor.js"></script>
+    <script src="js/basic.js"></script>
+    
+</body>
+</html>

@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>View Performance</title>
+
+    <script src="Scripts/angular.min.js"></script>
+    <script src="assets/js/jquery.js"></script>
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background: #E4E6E9;
+        }
+
+        .main-container {
+            padding-top: 72px;
+        }
+
+        .navbar-inverse {
+            background-color: #438EB9;
+            border-bottom-color: rgba(0,0,0,0.33);
+        }
+
+            .navbar-inverse .navbar-brand {
+                color: #EEE;
+            }
+
+        hr {
+            border-width: 0;
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+    </style>
+    <script src="assets/js/bootstrap.js"></script>
+    <script>
+        function fnLoading() {
+            document.getElementById("mainApp").style.display = "none";
+            document.getElementById("loading").style.display = "";
+        }
+        function fnUnLoading() {
+            document.getElementById("mainApp").style.display = "";
+            document.getElementById("loading").style.display = "none";
+        }
+        var app = angular.module('myApp', []);
+        var config = { headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;' } }
+        app.controller('StartApp', StartApp);
+        function StartApp($scope, $http) {
+            loadData($scope, $http);
+        }
+        function loadData($scope, $http) {
+            fnLoading();
+            var data = $.param({
+                Command: 'DataEntryCur'
+            });
+
+            $http.post("server/Server_Gunbook.aspx", data, config)
+                .success(function (data, status, headers, config) {
+                    $scope.DATA = data.records;
+                    fnUnLoading();
+                    try {
+
+                    } catch (err) { }
+                })
+                .error(function (data, status, header, config) { });
+        }
+    </script>
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header pull-left">
+                <a class="navbar-brand" href="#">
+                    &nbsp;<i class="glyphicon glyphicon-eye-open"></i>&nbsp;
+                    View Performance <span class="smaller-75"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainApp" class="container main-container" ng-app="myApp" ng-controller="StartApp">
+        <h2 class="page-header text-primary text-center">Performance</small></h2>
+
+        <div class="row" style="margin-bottom:20px;">
+            <div class="col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-striped" style="border: 1px outset #90ccff;background: #d4ebff;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(key,item) in DATA">
+                                <td scope="row">{{key + 1}}</td>
+                                <td>{{item.UserName}}</td>
+                                <td>{{item.DataEntry}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading" style="display:none;margin-top:50px">
+        <center>
+            <h1 class="bigger"><i class="ace-icon fa fa-spinner fa-spin orange"></i></h1>
+            <h3>
+                อยู่ระหว่างประมวลผลโปรดรอ...
+            </h3>
+        </center>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+bookno=80&bookyear=2504&gunregidprefix=04&gunregidstart=277428&gunregidend=281227&pagetotal=200
+bookno=81&bookyear=2504&gunregidprefix=04&gunregidstart=281228&gunregidend=285029&pagetotal=200
+bookno=82&bookyear=2504&gunregidprefix=04&gunregidstart=285030&gunregidend=288829&pagetotal=200
+bookno=83&bookyear=2504&gunregidprefix=04&gunregidstart=288830&gunregidend=292630&pagetotal=200
+
+bookno=90&bookyear=2520&gunregidprefix=20&gunregidstart=32001&gunregidend=40000&pagetotal=160
+bookno=91&bookyear=2520&gunregidprefix=20&gunregidstart=50001&gunregidend=58000&pagetotal=400
+bookno=92&bookyear=2520&gunregidprefix=20&gunregidstart=58001&gunregidend=66000&pagetotal=400
+bookno=93&bookyear=2520&gunregidprefix=20&gunregidstart=66001&gunregidend=74000&pagetotal=400
+bookno=96&bookyear=2521&gunregidprefix=21&gunregidstart=00001&gunregidend=08000&pagetotal=400
+bookno=97&bookyear=2521&gunregidprefix=21&gunregidstart=08001&gunregidend=16000&pagetotal=400
+bookno=98&bookyear=2521&gunregidprefix=21&gunregidstart=16001&gunregidend=24000&pagetotal=400
